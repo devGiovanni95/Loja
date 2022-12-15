@@ -24,4 +24,11 @@ public class Produto {
     private String modelo;
 
     private String descricao;
+
+    public Produto(Loja loja, String marca, String modelo, String descricao) {
+        this.loja = loja;
+        this.marca = marca;
+        this.modelo = modelo;
+        this.descricao = descricao;
+    }
 }
