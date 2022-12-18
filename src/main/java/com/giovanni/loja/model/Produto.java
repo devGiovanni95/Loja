@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.Generated;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -25,10 +27,13 @@ public class Produto {
 
     private String descricao;
 
-    public Produto(Loja loja, String marca, String modelo, String descricao) {
+    private BigDecimal preco;
+
+    public Produto(Loja loja, String marca, String modelo, String descricao, BigDecimal preco) {
         this.loja = loja;
         this.marca = marca;
         this.modelo = modelo;
         this.descricao = descricao;
+        this.preco = preco;
     }
 }

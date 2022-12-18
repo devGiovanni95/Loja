@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class ProdutoService {
@@ -27,10 +28,25 @@ public class ProdutoService {
         return  mapProdutoDto(produtosPorLoja);
     }
 
-    public void adicionaProduto(ProdutoDto produto){
+    public void adicionarProduto(ProdutoDto produto){
         Loja loja = lojaRepository.findById(produto.getIdloja()).get();
-        produtoRepository.save(new Produto(loja,produto.getMarca(), produto.getModelo(), produto.getDescricao()));
+        produtoRepository.save(new Produto(loja,produto.getMarca(), produto.getModelo(), produto.getDescricao(),produto.getPreco()));
 
+    }
+
+    public void editarProduto(ProdutoDto produtoDto, long id){
+
+       produtoRepository.findById(id).ifPresentOrElse(item->{
+            item.setDescricao(produtoDto.getDescricao());
+            item.setPreco(produtoDto.getPreco());
+        },()->{
+            throw new NoSuchElementException();
+       });
+    }
+
+    public  void deletarProduto(long id){
+        Produto produto = produtoRepository.findById(id).get();//usa o get pois o findById retorna um Optional
+        produtoRepository.delete(produto);
     }
 
     private List<ProdutoDto> mapProdutoDto(List<Produto> produtos){
@@ -38,7 +54,7 @@ public class ProdutoService {
         List<ProdutoDto> produtoDto = new ArrayList<>();
 
         produtos.forEach(item-> {
-            ProdutoDto produtoEntity = new ProdutoDto(item.getId(), item.getMarca(),item.getModelo(),item.getDescricao());
+            ProdutoDto produtoEntity = new ProdutoDto(item.getId(), item.getMarca(),item.getModelo(),item.getDescricao(),item.getPreco());
             produtoDto.add(produtoEntity);
         });
 
